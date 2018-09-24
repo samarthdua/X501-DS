@@ -1,40 +1,86 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="CSS/style.css">
     <style type="text/css">
       .placeholder {
         background-color: rgb(200,200,255);
         border: 2px solid rgb(50, 50, 100);
+      }
+
+      section {
+        border: 3px solid rgb(0,57,99);
+        text-align: center;
+
+      }
+
+      section h2 {
+        font-size: 10pt;
+        color: #999;
+        text-transform: uppercase;
+        text-align: left;
+      }
+
+      .label {
+        font-size: 12px;
+        color: #ccc;
+        text-transform: capitalize;
+
+      }
+      .data {
+        font-size: 22px;
+        color: rgb(0,91,148);
+        font-weight: bold;
       }
     </style>
     <title>Project Dashboard</title>
   </head>
   <body>
 
-    <div class="container-fluid">
-      <h1>Project Name</h1>
+    <div id = "dashboard" class="container-fluid">
+
+      <h1>{{name}}</h1>
+      <p><em>{{ short_description }}</em></p>
       <div class="row">
         <div class="col placeholder">
           Completion %
         </div>
-        <div class="col placeholder">
-          Due date | days remaining
-        </div>
+
+        <section class="col">
+          <h2>Target Date</h2>
+          <div class="row">
+            <div class="col">
+              <h2>Due date</h2>
+              <div class="ban">{{ pretty_target_date }}</div>
+            </div>
+            <div class="col">
+              <h2>Remaining</h2>
+              <div class="ban">{{ days_left }} days</div>
+            </div>
+          </div>
+        </section>
+
         <div class="col placeholder">
           Status
         </div>
       </div> <!-- end row 1, high-level summary information -->
 
       <div class="row">
-        <div class="col placeholder" style="height:200px">
-          Budget chart goes here.
-        </div>
+        <section class="col">
+          <h2>Spent</h2>
+          <div class="ban">{{ pretty_currency(spent) }}</div>
+
+          <h2>Budget</h2>
+          <div class="ban">{{ pretty_currency(budget) }}</div>
+
+          <h2>Projected Spend</h2>
+          <div class="ban">{{ pretty_currency(projected_spend) }}</div>
+        </section>
         <div class="col placeholder">
           Burndown chart goes here.
         </div>
@@ -44,47 +90,47 @@
       </div> <!-- end row 2, charts -->
 
       <div class="row">
-        <table class="table table-striped table-sm">
+        <table id="taskTable" class="table table-striped table-sm table-hover">
           <thead>
             <tr>
-              <th>
-                Task
-              </th>
-              <th>
-                Size
-              </th>
-              <th>
-                Team Name
-              </th>
+              <th>Task</th>
+              <th>Type</th>
+              <th>Size</th>
+              <th>Assigned Team</th>
+              <th>Status</th>
+              <th>Started</th>
+              <th>Hrs</th>
+              <th>% Complete</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                Create a dashboard
-              </td>
-              <td>
-                L
-              </td>
-              <td>
-                Dancing Foxes
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Build charts
-              </td>
-              <td>
-                M
-              </td>
-              <td>
-                Walled Terrapins
-              </td>
+            <tr v-for="task in tasks"
+                :key="task.id"
+                v-bind:id="'task-' + task.id"
+                :class="task.current_sprint ? 'current-sprint' : '' "
+                @click="gotoTask(task.id)">
+              <td>{{ task.title }}</td>
+              <td>{{ task.type }}</td>
+              <td>{{ task.size }}</td>
+              <td>{{ task.team }}</td>
+              <td>{{ task.status }}</td>
+              <td>{{ task.start_date }}</td>
+              <td>{{ task.hours_worked }}</td>
+              <td :class="completeClass(task)">{{ task.perc_complete }}</td>
             </tr>
           </tbody>
         </table>
 
       </div> <!-- end row 3, tabular data -->
+      <div class="row">
+        <button v-on:click="log('foo')">Click Me!</button>
+
+      </div>
     </div>
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/dashboard.app.js"></script>
+    <script src="js/tablesort.min.js"></script>
+    <script>new Tablesort(document.getElementById('taskTable'));</script>
   </body>
 </html>
