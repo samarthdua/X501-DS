@@ -1,11 +1,11 @@
 <?php
 class Team
 {
-  public $id;
+  public $team_id;
   public $name;
   public $hourly_rate;
   public function __construct($data) {
-    $this->id = intval($data['id']);
+    $this->team_id = intval($data['team_id']);
     $this->name = $data['name'];
     $this->hourly_rate = floatval($data['hourly_rate']);
   }
