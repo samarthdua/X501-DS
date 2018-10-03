@@ -93,7 +93,8 @@ var tasksApp = new Vue({
         start_time: this.timeFormat(),
         stop: this.dateFormat(),
         stop_time: this.timeFormat(),
-        teamList: null,
+        team_id: null,
+        task_id: this.task.id,
         completion_estimate: 0
       }
     },
