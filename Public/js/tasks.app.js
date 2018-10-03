@@ -14,7 +14,7 @@ var tasksApp = new Vue({
       perc_complete: '',
       current_sprint : ''
     },
-    work: [
+    work: [ ],
       // {
       //   id: 0,
       //   start: '',
@@ -22,71 +22,53 @@ var tasksApp = new Vue({
       //   hours: '',
       //   completion_estimate: ''
       // }
-      {
-        "id": 101,
-        "start": "2018-07-29T08:30",
-        "stop": "2018-07-29T011:30",
-        "hours": 3,
-        "completion_estimate": 0.10
-      },
-      {
-        "id": 102,
-        "start": "2018-07-29T13:30",
-        "stop": "2018-07-29T16:30",
-        "hours": 3,
-        "completion_estimate": 0.25
-      },
-      {
-        "id": 103,
-        "start": "2018-07-30T08:30",
-        "stop": "2018-07-30T11:30",
-        "hours": 3,
-        "completion_estimate": 0.5
-      },
-      {
-        "id": 104,
-        "start": "2018-08-01T09:30",
-        "stop": "2018-08-01T13:30",
-        "hours": 4,
-        "completion_estimate": 0.8
-      },
-      {
-        "id": 105,
-        "start": "2018-08-03T14:30",
-        "stop": "2018-08-03T18:30",
-        "hours": 4,
-        "completion_estimate": 0.85
-      }
-    ],
-    workForm: {
-      start: '',
-      stop: '',
-      completion_estimate: ''
-    }
+
+    workForm: { },
+    teamList: [ ]
+  },
+  computed: {
+    workSpan () {
+      return moment(this.workForm.stop)
+             .diff(moment(this.workForm.start), 'hours', true)
+             .toFixed(1);
+           }
   },
   methods: {
     handleWorkForm(e) {
       // TODO: Check validity
-      e.preventDefault();
-      console.log(e);
-      alert(JSON.stringify(this.workForm));
+      //e.preventDefault();
+      //console.log(e);
+      if (this.workSpan <= 0) {
+        console.error ("Invalid work period.")
+      }
 
+      this.workForm.start_date = this.workForm.start + ' ' + this.workForm.start_time;
+      this.workForm.hours = this.workSpan;
+      this.workForm.task_id = this.taskId;
       // TODO: Calculate hours
       // something like:  moment.duration(end.diff(startTime)).asHours();
 
       //TODO: clone workForm
       const s = JSON.stringify(this.workForm);
+      console.log(s);
       //TODO: POST to remote server
+      fetch('api/work.php', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8"
+        },
+        body: s
+      })
       //TODO: Append result
-
-      this.work.push(JSON.parse(s));
+      .then( response => response.json() )
+      .then( json => {this.work.push(json)})
+      .catch( err => {
+        console.error('WORK POST ERROR:');
+        console.error(err);
+      })
 
       // Reset workForm
-      this.workForm = {
-        start: '',
-        stop: '',
-        completion_estimate: ''
-      }
+      this.workForm = this.getEmptyWorkForm();
     },
     sumHours() {
       return this.work.reduce(
@@ -96,13 +78,36 @@ var tasksApp = new Vue({
     },
     diffAsHours() {
       return 0 //moment().duration(end.diff(startTime)).asHours();
+    },
+    dateFormat(d) {
+      d = d || moment();
+      return moment(d).format('YYYY-MM-DD');
+    },
+    timeFormat(d) {
+      d = d || moment();
+      return moment(d).format('HH:mm');
+    },
+    getEmptyWorkForm() {
+      return {
+        start: this.dateFormat(),
+        start_time: this.timeFormat(),
+        stop: this.dateFormat(),
+        stop_time: this.timeFormat(),
+        teamList: null,
+        completion_estimate: 0
+      }
+    },
+    prettyDate(d) {
+      return moment(d).format('YYYY-MM-DD HH:MM')
     }
   },
   created () {
+    this.workForm = this.getEmptyWorkForm();
     console.log(window.location.href);
 
     const url = new URL(window.location.href);
     const taskId = url.searchParams.get("taskId");
+    this.taskId = taskId;
 
     this.task.id = taskId;
 
@@ -112,6 +117,20 @@ var tasksApp = new Vue({
       //e.g., window.location = '404.html';
     }
 
-    // TODO: Fetch task-specific data
+    fetch('api/work.php?taskId='+taskId)
+    .then( response => response.json() )
+    .then( json => {tasksApp.work = json} )
+    .catch( err => {
+      console.log('WORK FETCH ERROR:');
+      console.log(err);
+    })
+
+    fetch('api/team.php')
+    .then( response => response.json() )
+    .then( json => {tasksApp.teamList = json} )
+    .catch( err => {
+      console.log('TEAM LIST ERROR:');
+      console.log(err);
+    })
   }
 })
