@@ -44,7 +44,7 @@ var tasksApp = new Vue({
 
       this.workForm.start_date = this.workForm.start + ' ' + this.workForm.start_time;
       this.workForm.hours = this.workSpan;
-      this.workForm.task_id = this.taskId;
+
       // TODO: Calculate hours
       // something like:  moment.duration(end.diff(startTime)).asHours();
 
@@ -108,16 +108,16 @@ var tasksApp = new Vue({
 
     const url = new URL(window.location.href);
     const taskId = url.searchParams.get("taskId");
-    this.taskId = taskId;
 
-    this.task.id = taskId;
 
     console.log('Task: '+ taskId);
+    this.task.id = taskId;
     if (!taskId) {
       //TODO: Error? 404?
       //e.g., window.location = '404.html';
     }
-
+    this.workForm = this.getEmptyWorkForm();
+    
     fetch('api/work.php?taskId='+taskId)
     .then( response => response.json() )
     .then( json => {tasksApp.work = json} )
