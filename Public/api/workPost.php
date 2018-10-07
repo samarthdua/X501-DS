@@ -1,8 +1,8 @@
 <?php
 
-var_dump($_POST);
+//var_dump($_POST);
 
-// $work = new Work($_POST);
-//
-// $work->create();
-// echo json_encode($work);
+$work = new Work($_POST);
+
+$work->create();
+echo json_encode($work);
