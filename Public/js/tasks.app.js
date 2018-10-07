@@ -28,7 +28,7 @@ var tasksApp = new Vue({
   },
   computed: {
     workSpan () {
-      return moment(this.workForm.stop)
+      return moment(this.workForm.stop + ' ' + this.workForm.stop_time)
              .diff(moment(this.workForm.start + ' ' + this.workForm.start_time), 'hours', true)
              .toFixed(1);
            }
@@ -117,7 +117,7 @@ var tasksApp = new Vue({
       //e.g., window.location = '404.html';
     }
     this.workForm = this.getEmptyWorkForm();
-    
+
     fetch('api/work.php?taskId='+taskId)
     .then( response => response.json() )
     .then( json => {tasksApp.work = json} )
