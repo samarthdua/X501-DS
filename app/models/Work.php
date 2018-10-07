@@ -9,7 +9,7 @@ class Work
   public $hours;
   public $completion_estimate;
   public function __construct($row) {
-    $this->id = issest($row['id']) ? intval($row['id']): null;
+    $this->id = isset($row['id']) ? intval($row['id']): null;
 
     $this->task_id = intval($row['task_id']);
     $this->team_id = intval($row['team_id']);
