@@ -116,8 +116,8 @@
                     <div class="col-sm-6">
                       <select id="team" v-model="workForm.team_id" class="form-control" required>
                         <option v-for="t in teamList"
-                        :key="t.id"
-                        :value="t.id">{{ t.name }}</option>
+                        :key="t.team_id"
+                        :value="t.team_id">{{ t.name }}</option>
                       </select>
                     </div>
                   </div>

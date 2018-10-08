@@ -83,9 +83,9 @@ var tasksApp = new Vue({
       d = d || moment();
       return moment(d).format('YYYY-MM-DD');
     },
-    timeFormat(d) {
-      d = d || moment();
-      return moment(d).format('HH:mm');
+    timeFormat(t) {
+      t = t || moment();
+      return moment(t).format('HH:mm');
     },
     getEmptyWorkForm() {
       return {
