@@ -63,8 +63,8 @@ var dashboardApp = new Vue({
         return 'alert-warning';
       }
     },
-    fetchTasks: function() {
-      fetch('https://raw.githubusercontent.com/tag/iu-msis/dev/public/p1-tasks.json')
+    fetchTasks () {
+      fetch('https://raw.githubusercontent.com/tag/iu-msis/dev/app/data/p1-tasks.json')
       .then( response => response.json())
       .then( json => {
         this.tasks = json;
@@ -77,13 +77,36 @@ var dashboardApp = new Vue({
       });
     },
     fetchProject () {
-      fetch('https://raw.githubusercontent.com/tag/iu-msis/dev/public/project1.json')
+      fetch('https://raw.githubusercontent.com/tag/iu-msis/dev/app/data/project1.json')
       .then( response => response.json() )
-      .then( json => {dashboardApp.project = json} )
+      .then( json => {
+        dashboardApp.project = json;
+        this.formatWorkHoursData();
+        //this.buildEffortChart();
+      })
       .catch( err => {
         console.log('PROJECT FETCH ERROR:');
         console.log(err);
       })
+    },
+    fetchProjectWork (pid) {
+      fetch('api/workHours?projectId='+pid)
+      .then( response => response.json() )
+      .then( json => {dashboardApp.workHours = json} )
+      .catch( err => {
+        console.log('PROJECT FETCH ERROR:');
+        console.log(err);
+      })
+    },
+    formatWorkHoursData() {
+      this.workHours.forEach(
+        function(entry, index, arr) {
+          entry.hours = Number(entry.hours);
+          entry.runningTotalHours = entry.hours + (index > 0 ? 0 : arr[index-1].runningTotalHours);
+          entry.date = Date.parse(entry.date);
+        }
+      );
+      console.log(this.workHours);
     },
     gotoTask(tid) {
       console.log(tid);
@@ -91,7 +114,9 @@ var dashboardApp = new Vue({
     }
   },
   created: function() {
+    this.fetchProject();
     this.fetchTasks();
+    this.fetchProjectWork();
   }
 
 
