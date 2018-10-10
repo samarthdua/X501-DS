@@ -102,7 +102,7 @@ var dashboardApp = new Vue({
       this.workHours.forEach(
         function(entry, index, arr) {
           entry.hours = Number(entry.hours);
-          entry.runningTotalHours = entry.hours + (index > 0 ? 0 : arr[index-1].runningTotalHours);
+          entry.runningTotalHours = entry.hours + (index > 0 ? arr[index-1].runningTotalHours : 0);
           entry.date = Date.parse(entry.date);
         }
       );
