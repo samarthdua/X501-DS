@@ -63,7 +63,7 @@ var dashboardApp = new Vue({
         return 'alert-warning';
       }
     },
-    fetchTasks () {
+    fetchTasks (pid) {
       fetch('https://raw.githubusercontent.com/tag/iu-msis/dev/app/data/p1-tasks.json')
       .then( response => response.json())
       .then( json => {
