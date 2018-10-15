@@ -17,10 +17,16 @@ class WorkHoursReport
           [$projectId]
         );
 
+      if (!$success) {
+        header('500 Server Error');
+        print_r($statement->errorInfo());
+        exit;
+      }
+
       $arr = $statement->fetchAll(PDO::FETCH_ASSOC);
 
       return $arr;
     }
 
-    
+
 }

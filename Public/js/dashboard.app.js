@@ -81,8 +81,7 @@ var dashboardApp = new Vue({
       .then( response => response.json() )
       .then( json => {
         dashboardApp.project = json;
-        //this.formatWorkHoursData();
-        //this.buildEffortChart();
+
       })
       .catch( err => {
         console.log('PROJECT FETCH ERROR:');
@@ -92,7 +91,11 @@ var dashboardApp = new Vue({
     fetchProjectWork (pid) {
       fetch('api/workHours?projectId='+pid)
       .then( response => response.json() )
-      .then( json => {dashboardApp.workHours = json} )
+      .then( json => {
+        dashboardApp.workHours = json;
+        this.formatWorkHoursData();
+        this.buildEffortChart();
+      } )
       .catch( err => {
         console.log('PROJECT FETCH ERROR:');
         console.log(err);
