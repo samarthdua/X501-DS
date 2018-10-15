@@ -81,7 +81,7 @@ var dashboardApp = new Vue({
       .then( response => response.json() )
       .then( json => {
         dashboardApp.project = json;
-        this.formatWorkHoursData();
+        //this.formatWorkHoursData();
         //this.buildEffortChart();
       })
       .catch( err => {
@@ -153,9 +153,9 @@ var dashboardApp = new Vue({
 
             series: [{
                 type: 'area',
-                name: 'Hours (Running Total)',
+                name: 'Effort (hrs)',
                 // Data needs [ [date, num], [date2, num2 ], ... ]
-                data: this.workHours.map( item => [item.date, item.runningTotalHours] )
+                data: this.workHours.map( row => [row.date, row.runningTotalHours] )
             }]
         });
     },
@@ -165,9 +165,17 @@ var dashboardApp = new Vue({
     }
   },
   created: function() {
-    this.fetchProject();
-    this.fetchTasks();
-    this.fetchProjectWork();
+    const url = new URL(window.location.href);
+    const projectId = url.searchParams.get('projectId') || 0;
+
+    if (!projectId) {
+      console.error('Project Id not defined in URL parameters.')
+    }
+
+    this.project.id = projectId;
+    this.fetchProject(projectId);
+    this.fetchTasks(projectId);
+    this.fetchProjectWork(projectId);
   }
 
 
