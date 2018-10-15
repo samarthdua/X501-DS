@@ -87,7 +87,7 @@ var dashboardApp = new Vue({
       })
     },
     fetchProjectWork (pid) {
-      fetch('api/workHours?projectId='+pid)
+      fetch('api/workHours.php?projectId='+pid)
       .then( response => response.json() )
       .then( json => {
         dashboardApp.workHours = json;
