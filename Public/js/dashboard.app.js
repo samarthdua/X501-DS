@@ -2,12 +2,12 @@ var dashboardApp = new Vue({
   el: '#dashboard',
   data: {
     project: {
-          "name" : '',
-          "short_description": '',
-          "start_date" : '',
-          "target_date" : '',
-          "budget" : '',
-          "spent" : '',
+          name : '',
+          short_description: '',
+          start_date : '',
+          target_date : '',
+          budget : '',
+          spent : '',
           projected_spend: '',
           weekly_effort_target: ''
         },
