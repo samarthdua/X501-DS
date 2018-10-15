@@ -9,7 +9,8 @@ class WorkHoursReport
               FROM Work, Tasks
               WHERE Work.task_id = Tasks.id
               AND Tasks.project_id = ?
-              GROUP BY DATE(start_date)';
+              GROUP BY DATE(start_date)
+              ORDER BY date';
 
       $statement = $db->prepare($sql);
 
@@ -23,9 +24,9 @@ class WorkHoursReport
         exit;
       }
 
-      $arr = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-      return $arr;
+
+      return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
 

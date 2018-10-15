@@ -101,7 +101,7 @@ var dashboardApp = new Vue({
         console.log(err);
       })
     },
-    formatWorkHoursData() {
+    formatWorkHours() {
       this.workHours.forEach(
         function(entry, index, arr) {
           entry.hours = Number(entry.hours);
