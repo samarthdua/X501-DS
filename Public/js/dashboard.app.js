@@ -76,7 +76,7 @@ var dashboardApp = new Vue({
         console.log(err);
       });
     },
-    fetchProject () {
+    fetchProject (pid) {
       fetch('https://raw.githubusercontent.com/tag/iu-msis/dev/app/data/project1.json')
       .then( response => response.json() )
       .then( json => {
@@ -93,7 +93,7 @@ var dashboardApp = new Vue({
       .then( response => response.json() )
       .then( json => {
         dashboardApp.workHours = json;
-        this.formatWorkHoursData();
+        this.formatWorkHours();
         this.buildEffortChart();
       } )
       .catch( err => {
