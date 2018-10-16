@@ -44,8 +44,8 @@
 
     <div id = "dashboard" class="container-fluid">
 
-      <h1>{{name}}</h1>
-      <p><em>{{ short_description }}</em></p>
+      <h1>{{project.name}}</h1>
+      <p><em>{{ project.short_description }}</em></p>
       <div class="row">
         <div class="col placeholder">
           Completion %
@@ -73,13 +73,13 @@
       <div class="row">
         <section class="col">
           <h2>Spent</h2>
-          <div class="ban">{{ pretty_currency(spent) }}</div>
+          <div class="ban">{{ pretty_currency(project.spent) }}</div>
 
           <h2>Budget</h2>
-          <div class="ban">{{ pretty_currency(budget) }}</div>
+          <div class="ban">{{ pretty_currency(project.budget) }}</div>
 
           <h2>Projected Spend</h2>
-          <div class="ban">{{ pretty_currency(projected_spend) }}</div>
+          <div class="ban">{{ pretty_currency(project.projected_spend) }}</div>
         </section>
         <div class="col placeholder">
           Burndown chart goes here.
