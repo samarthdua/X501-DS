@@ -33,7 +33,7 @@ var dashboardApp = new Vue({
       return 31;
     },
     pretty_target_date: function () {
-      return this.pretty_date(this.target_date);
+      return this.pretty_date(this.project.target_date);
     }
   },
   methods: {
